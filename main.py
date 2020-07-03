@@ -1,9 +1,11 @@
 from UCF_Utils import read_and_combine_jsons
 import UCF_TemporalVariables
+import UCF_PerformanceVariables
 import pandas as pd
 
 data_dir = "./data"
 data_csv = "data.csv"
+variables_file = "UCF_variables.csv"
 
 
 # df = read_and_combine_jsons(data_dir, data_csv)
@@ -28,5 +30,8 @@ variable_dfs.append(sprinting_time_df)
 navigating_time_df = UCF_TemporalVariables.extract_navigating_time(df)
 variable_dfs.append(navigating_time_df)
 
+saved_victims_df = UCF_PerformanceVariables.extract_saved_victims(df)
+variable_dfs.append(saved_victims_df)
+
 variables = pd.concat(variable_dfs, axis=1)
-print(variables)
+variables.to_csv(variables_file)
