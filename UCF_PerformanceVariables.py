@@ -3,6 +3,13 @@ from collections import Counter
 
 
 def extract_saved_victims(df):
+    """
+    Extract the number of yellow and green victims saved in each trial. Besides the order of victims saved in terms of
+    their color.
+    :param df: combined json files in pandas DataFrame format
+    :return: a pandas DataFrame containing the number green and yellow victims saved and the order in which triaging
+    has occured for each trial.
+    """
     event_df = df[df['msg.sub_type'] == 'Event:Triage']
     grouped = event_df.groupby('trial_id')
     saved_victim_data = []
