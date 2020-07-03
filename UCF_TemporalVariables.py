@@ -2,6 +2,15 @@ import pandas as pd
 
 
 def extract_event_time(df, event_type, state_col, end_states):
+    """
+    Calculate the time spent performing an event type for each trial
+    :param df: combined json file in pandas DataFrame format
+    :param event_type: 'msg.sub_type' values in json files (e.g. 'Event:Triage')
+    :param state_col: the column that determines the state of the event (e.g. 'data.triage_state')
+    :param end_states: there is a record for the event when the event starts and ends. end_states is a list of states
+    that represent the ending of an event. (e.g. ['SUCCESSFUL', 'UNSUCCESSFUL'] for triage)
+    :return: a pandas DataFrame containing trial id and time spent performing the event in that trial
+    """
     event_df = df[df['msg.sub_type'] == event_type]
     grouped = event_df.groupby('trial_id')
     trial_event_times = []
@@ -16,6 +25,11 @@ def extract_event_time(df, event_type, state_col, end_states):
 
 
 def extract_navigating_time(df):
+    """
+    Calculate navigating time for each trial. Navigating is detected by observing non-zero movement along x or z axes
+    :param df: combined json file in pandas DataFrame format
+    :return: a pandas DataFrame containing trial id and time spent navigating in that trial
+    """
     nav_df = df[['trial_id', 'msg.timestamp', 'data.x', 'data.z']].dropna()
     grouped = nav_df.groupby('trial_id')
     trial_navtime = []
