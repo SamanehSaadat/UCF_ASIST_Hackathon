@@ -2,17 +2,26 @@ from UCF_Utils import read_and_combine_jsons
 import UCF_TemporalVariables
 import UCF_PerformanceVariables
 import UCF_SpacialVariables
+from Building import Building
 import pandas as pd
+import argparse
 
-data_dir = "./data"
-data_csv = "data.csv"
-variables_file = "output/ucf_variables.csv"
+# data_dir = "./data"
+# data_csv = "data.csv"
+variables_file = "./output/ucf_variables.csv"
 
+parser = argparse.ArgumentParser()
+parser.add_argument("-d", '--data_directory', action='store', type=str,
+                    help='Directory that contains *_messages.json fiels')
+parser.add_argument('data_file', action='store', type=str,
+                    help='The CSV file which contains all data from json files')
+args = parser.parse_args()
 
-# df = read_and_combine_jsons(data_dir, data_csv)
+if args.data_directory:
+    df = read_and_combine_jsons(args.data_directory, args.data_file)
+# Loading data #
+df = pd.read_csv(args.data_file)
 
-### Loading data ###
-df = pd.read_csv(data_csv)
 df['msg.timestamp'] = pd.to_datetime(df['msg.timestamp'])
 
 variable_dfs = []
@@ -37,21 +46,14 @@ variable_dfs.append(saved_victims_df)
 
 
 # EXTRACTING UCF SPACIAL VARIABLES #
-building_trials = {
-    'sparky': ['3', '6', '8', '10', '13', '14'],
-    'falcon': ['4', '7', '9', '11', '12', '15']
-}
-building_zones_file = {
-    'sparky': './building_info/sparky_zoning.csv',
-    'falcon': './building_info/falcon_zoning.csv'
-}
+falcon = Building(bname='falcon', zones_file='./building_info/falcon_zoning.csv',
+                  trials=['4', '7', '9', '11', '12', '15'])
+sparky = Building(bname='sparky', zones_file='./building_info/sparky_zoning.csv',
+                  trials=['3', '6', '8', '10', '13', '14'])
 
-dfs = []
-for asist_map, trials in building_trials.items():
-    building_spacial_variables_df = UCF_SpacialVariables.building_spacial_variables(df, trials, building_zones_file[asist_map])
-    print(building_spacial_variables_df)
-    dfs.append(building_spacial_variables_df)
-spacial_variables_df = pd.concat(dfs)
+falcon_spacial_variables_df = UCF_SpacialVariables.building_spacial_variables(df, falcon)
+sparky_spacial_variables_df = UCF_SpacialVariables.building_spacial_variables(df, sparky)
+spacial_variables_df = pd.concat([falcon_spacial_variables_df, sparky_spacial_variables_df])
 variable_dfs.append(spacial_variables_df)
 
 variables = pd.concat(variable_dfs, axis=1)

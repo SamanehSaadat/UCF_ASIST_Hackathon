@@ -44,9 +44,9 @@ def zone_visits_revisits(df, zones, experiment):
     return visit_revisit_percent_df
 
 
-def building_spacial_variables(df, building_trials, building_zones_file):
-    building_df = df[df['trial_id'].isin(building_trials)]
-    building_zones = pd.read_csv(building_zones_file)
+def building_spacial_variables(df, building):
+    building_df = df[df['trial_id'].isin(building.trials)]
+    building_zones = pd.read_csv(building.zones_file)
 
     building_df.dropna(subset=['data.x', 'data.z'], inplace=True)
     grouped = building_df.groupby('trial_id')
