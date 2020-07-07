@@ -24,7 +24,7 @@ Percent of zones visited and revisited is calculated for the following situation
 * **green_victims_saved_count**: the total number of green victims saved
 * **yellow_victims_saved_count**: the total number of yellow victims saved
 
-The order in which the victims are saved is also stored in the output file as a string.
+The order in which the victims are saved is also stored in the output file as a string. This one is not a variable but variables can be derived form it.
 
 ## Usage
 To extract all UCF variables use the following command:
