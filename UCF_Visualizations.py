@@ -6,35 +6,23 @@ from matplotlib.animation import FuncAnimation
 import matplotlib.pyplot as plt
 
 
-def map_animate_traces(df, trial_id, map_zones, map_victims, map_size, map_limits, out_file):
+def building_animate_traces(df, trial_id, building, out_file):
     """
 
     :param df:
     :param trial_id:
-    :param map_zones:
-    :param map_victims:
-    :param map_size:
-    :param map_limits: l is the list; l[0] and l[1] specify y limits, l[2] and l[3] specify x limits
+    :param building:
     :param out_file:
     :return:
     """
-    map_victims = pd.read_csv(map_victims)
+    building_victims = pd.read_csv(building.victims_file)
+    building_zones = pd.read_csv(building.zones_file)
     df.dropna(subset=['data.x', 'data.z'], inplace=True)
     trial_df = df[df['trial_id'] == trial_id]
-    animate_traces(trial_df, map_zones, map_victims, map_size, map_limits, out_file)
+    animate_traces(trial_df, building_zones, building_victims, building.sizes, building.limits, out_file)
 
 
-def animate_traces(df, zones, victims, map_size, map_limits, out_file='animation.gif'):
-    """
-
-    :param df:
-    :param zones:
-    :param victims:
-    :param map_size:
-    :param map_limits:
-    :param out_file:
-    :return:
-    """
+def animate_traces(df, zones, victims, building_size, building_limits, out_file='animation.gif'):
     zone_coords = zones[['Zone Type Description', 'Xcoords-TopLeft', 'XCoords-BotRight',
                          'Zcoords-TopLeft', 'ZCoords-BotRight']].values.tolist()
 
@@ -72,7 +60,7 @@ def animate_traces(df, zones, victims, map_size, map_limits, out_file='animation
         greens = victims[victims['vcolor'] == 'G']
         plt.scatter(greens['z'], greens['x'], color='g', marker='s', s=80)
 
-    fig, ax = plt.subplots(figsize=map_size, dpi=100)
+    fig, ax = plt.subplots(figsize=building_size, dpi=100)
     plot_victims(victims)
 
     five_min_threshold = df['msg.timestamp'].min() + timedelta(minutes=5)
@@ -81,7 +69,7 @@ def animate_traces(df, zones, victims, map_size, map_limits, out_file='animation
 
     anim = plot_animate(first_5min_df['data.z'], first_5min_df['data.x'],
                         second_5min_df['data.z'], second_5min_df['data.x'], ax, fig)
-    ax.set_ylim(map_limits[0], map_limits[1])
-    ax.set_xlim(map_limits[2], map_limits[3])
+    ax.set_ylim(building_limits[0], building_limits[1])
+    ax.set_xlim(building_limits[2], building_limits[3])
 
     anim.save(out_file, writer='imagemagick')

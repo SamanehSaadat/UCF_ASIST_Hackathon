@@ -44,34 +44,34 @@ def zone_visits_revisits(df, zones, experiment):
     return visit_revisit_percent_df
 
 
-def map_spacial_variables(df, map_trials, map_zones_file):
-    map_df = df[df['trial_id'].isin(map_trials)]
-    map_zones = pd.read_csv(map_zones_file)
+def building_spacial_variables(df, building_trials, building_zones_file):
+    building_df = df[df['trial_id'].isin(building_trials)]
+    building_zones = pd.read_csv(building_zones_file)
 
-    map_df.dropna(subset=['data.x', 'data.z'], inplace=True)
-    grouped = map_df.groupby('trial_id')
+    building_df.dropna(subset=['data.x', 'data.z'], inplace=True)
+    grouped = building_df.groupby('trial_id')
     dfs = []
     for ti, trial_df in grouped:
-        res_df_simple = zone_visits_revisits(trial_df, map_zones, "simple")
+        res_df_simple = zone_visits_revisits(trial_df, building_zones, "simple")
 
-        map_zones['total_victims'] = map_zones['Number of Green'] + map_zones['Number of Yellow']
-        map_zones_with_victim = map_zones[map_zones['total_victims'] > 0]
-        res_df_with_victim = zone_visits_revisits(trial_df, map_zones_with_victim, "with_victim")
+        building_zones['total_victims'] = building_zones['Number of Green'] + building_zones['Number of Yellow']
+        building_zones_with_victim = building_zones[building_zones['total_victims'] > 0]
+        res_df_with_victim = zone_visits_revisits(trial_df, building_zones_with_victim, "with_victim")
 
-        map_rooms = map_zones[map_zones['Zone Type'] == 3]
-        res_df_rooms = zone_visits_revisits(map_df, map_rooms, "rooms")
+        building_rooms = building_zones[building_zones['Zone Type'] == 3]
+        res_df_rooms = zone_visits_revisits(building_df, building_rooms, "rooms")
 
-        map_rooms = map_zones[map_zones['Zone Type'] == 1]
-        res_df_hallways = zone_visits_revisits(map_df, map_rooms, "hallways")
+        building_rooms = building_zones[building_zones['Zone Type'] == 1]
+        res_df_hallways = zone_visits_revisits(building_df, building_rooms, "hallways")
 
-        map_rooms = map_zones[map_zones['Zone Type'] == 2]
-        res_df_entrances = zone_visits_revisits(map_df, map_rooms, "entrances")
+        building_rooms = building_zones[building_zones['Zone Type'] == 2]
+        res_df_entrances = zone_visits_revisits(building_df, building_rooms, "entrances")
 
         five_min_threshold = trial_df['msg.timestamp'].min() + timedelta(minutes=5)
         first_5min_df = trial_df[trial_df['msg.timestamp'] < five_min_threshold]
         second_5min_df = trial_df[trial_df['msg.timestamp'] >= five_min_threshold]
-        res_df_first_5min = zone_visits_revisits(first_5min_df, map_zones, "first_5min")
-        res_df_second_5min = zone_visits_revisits(second_5min_df, map_zones, "second_5min")
+        res_df_first_5min = zone_visits_revisits(first_5min_df, building_zones, "first_5min")
+        res_df_second_5min = zone_visits_revisits(second_5min_df, building_zones, "second_5min")
 
         trial_spacial_df = pd.concat([res_df_simple, res_df_with_victim,
                                       res_df_rooms, res_df_hallways, res_df_entrances,
