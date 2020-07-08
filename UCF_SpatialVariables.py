@@ -18,6 +18,13 @@ def assign_zone(player_x, player_z, zone_coords):
 
 
 def zone_visits_revisits(df, zones, experiment):
+    """
+    Calculate percent zone visited and revisited for one trial stored in df and zones of interest
+    :param df: events related to one trial (or events of a specific time period in a trial)
+    :param zones: zones of interest
+    :param experiment: a postfix that will be added to the variable names
+    :return: percent zones visited and revisited in df
+    """
     zone_coords = zones[['Zone Number', 'Xcoords-TopLeft', 'XCoords-BotRight',
                          'Zcoords-TopLeft', 'ZCoords-BotRight']].values.tolist()
 
@@ -44,7 +51,13 @@ def zone_visits_revisits(df, zones, experiment):
     return visit_revisit_percent_df
 
 
-def building_spacial_variables(df, building):
+def building_spatial_variables(df, building):
+    """
+    Calculated different spatial variables related to trials of one specific building
+    :param df: events related to trials
+    :param building: an object containing info about the building
+    :return: spatial variables
+    """
     building_df = df[df['trial_id'].isin(building.trials)]
     building_zones = pd.read_csv(building.zones_file)
 

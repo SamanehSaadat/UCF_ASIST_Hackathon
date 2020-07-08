@@ -51,8 +51,8 @@ falcon = Building(bname='falcon', zones_file='./building_info/falcon_zoning.csv'
 sparky = Building(bname='sparky', zones_file='./building_info/sparky_zoning.csv',
                   trials=['3', '6', '8', '10', '13', '14'])
 
-falcon_spacial_variables_df = UCF_SpatialVariables.building_spacial_variables(df, falcon)
-sparky_spacial_variables_df = UCF_SpatialVariables.building_spacial_variables(df, sparky)
+falcon_spacial_variables_df = UCF_SpatialVariables.building_spatial_variables(df, falcon)
+sparky_spacial_variables_df = UCF_SpatialVariables.building_spatial_variables(df, sparky)
 spacial_variables_df = pd.concat([falcon_spacial_variables_df, sparky_spacial_variables_df])
 variable_dfs.append(spacial_variables_df)
 
