@@ -1,5 +1,5 @@
 import pandas as pd
-import UCF_SpacialVariables
+import UCF_SpatialVariables
 import numpy as np
 from datetime import timedelta
 from matplotlib.animation import FuncAnimation
@@ -26,7 +26,7 @@ def animate_traces(df, zones, victims, building_size, building_limits, out_file=
     zone_coords = zones[['Zone Type Description', 'Xcoords-TopLeft', 'XCoords-BotRight',
                          'Zcoords-TopLeft', 'ZCoords-BotRight']].values.tolist()
 
-    df['zone'] = df.apply(lambda row: UCF_SpacialVariables.assign_zone(row['data.x'], row['data.z'], zone_coords),
+    df['zone'] = df.apply(lambda row: UCF_SpatialVariables.assign_zone(row['data.x'], row['data.z'], zone_coords),
                           axis=1)
 
     def plot_animate(x1, y1, x2, y2, ax, fig, point_pre_frame=20, c1='tab:blue', c2='tab:orange', m1='o', m2='x',

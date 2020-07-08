@@ -1,7 +1,7 @@
 # UCF Variable Extraction for ASIST Hackathon (June 2020)
 There are three categories of variables:
 1. Temporal variables
-2. Spacial variables
+2. Spatial variables
 3. Performance variables
 
 ### Temporal Variables
@@ -10,7 +10,7 @@ Time spent on different types of events:
 * **Event:PlayerSprinting_time**: time spent sprinting
 * **navigating_time**: time spent navigating.
 
-### Spacial Variables
+### Spatial Variables
 Percent of zones visited and revisited is calculated for the following situations:
 * **simple**: percent zone visited and revisited in the entire mission
 * **with_victim**: percent of zones _with victims_ visited and revisited

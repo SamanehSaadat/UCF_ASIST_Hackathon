@@ -1,7 +1,7 @@
 from UCF_Utils import read_and_combine_jsons
 import UCF_TemporalVariables
 import UCF_PerformanceVariables
-import UCF_SpacialVariables
+import UCF_SpatialVariables
 from Building import Building
 import pandas as pd
 import argparse
@@ -51,8 +51,8 @@ falcon = Building(bname='falcon', zones_file='./building_info/falcon_zoning.csv'
 sparky = Building(bname='sparky', zones_file='./building_info/sparky_zoning.csv',
                   trials=['3', '6', '8', '10', '13', '14'])
 
-falcon_spacial_variables_df = UCF_SpacialVariables.building_spacial_variables(df, falcon)
-sparky_spacial_variables_df = UCF_SpacialVariables.building_spacial_variables(df, sparky)
+falcon_spacial_variables_df = UCF_SpatialVariables.building_spacial_variables(df, falcon)
+sparky_spacial_variables_df = UCF_SpatialVariables.building_spacial_variables(df, sparky)
 spacial_variables_df = pd.concat([falcon_spacial_variables_df, sparky_spacial_variables_df])
 variable_dfs.append(spacial_variables_df)
 
